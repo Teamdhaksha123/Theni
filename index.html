@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/LeaseArea_3.js"></script>
+        <script src="data/ExtraExcavated_4.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">Google</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Dhaksha</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        map.createPane('pane_googleearth_0');
+        map.getPane('pane_googleearth_0').style.zIndex = 400;
+        var layer_googleearth_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            pane: 'pane_googleearth_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_googleearth_0;
+        map.addLayer(layer_googleearth_0);
+        map.createPane('pane_20_VillageMap_1');
+        map.getPane('pane_20_VillageMap_1').style.zIndex = 401;
+        var img_20_VillageMap_1 = 'data/20_VillageMap_1.png';
+        var img_bounds_20_VillageMap_1 = [[9.967892721184008,77.52551044938166],[10.009498782137177,77.58178733900536]];
+        var layer_20_VillageMap_1 = new L.imageOverlay(img_20_VillageMap_1,
+                                              img_bounds_20_VillageMap_1,
+                                              {pane: 'pane_20_VillageMap_1'});
+        bounds_group.addLayer(layer_20_VillageMap_1);
+        map.addLayer(layer_20_VillageMap_1);
+        map.createPane('pane_20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2');
+        map.getPane('pane_20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2').style.zIndex = 402;
+        var img_20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2 = 'data/20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2.png';
+        var img_bounds_20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2 = [[10.002158292077867,77.54284306359844],[10.005363389342335,77.5463733696241]];
+        var layer_20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2 = new L.imageOverlay(img_20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2,
+                                              img_bounds_20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2,
+                                              {pane: 'pane_20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2'});
+        bounds_group.addLayer(layer_20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2);
+        map.addLayer(layer_20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2);
+        function pop_LeaseArea_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>LAYER</strong><br />' + (feature.properties['LAYER'] !== null ? autolinker.link(feature.properties['LAYER'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Lease_Area</strong><br />' + (feature.properties['Lease_Area'] !== null ? autolinker.link(feature.properties['Lease_Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_LeaseArea_3_0() {
+            return {
+                pane: 'pane_LeaseArea_3',
+                opacity: 1,
+                color: 'rgba(237,245,17,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_LeaseArea_3');
+        map.getPane('pane_LeaseArea_3').style.zIndex = 403;
+        map.getPane('pane_LeaseArea_3').style['mix-blend-mode'] = 'normal';
+        var layer_LeaseArea_3 = new L.geoJson(json_LeaseArea_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_LeaseArea_3',
+            layerName: 'layer_LeaseArea_3',
+            pane: 'pane_LeaseArea_3',
+            onEachFeature: pop_LeaseArea_3,
+            style: style_LeaseArea_3_0,
+        });
+        bounds_group.addLayer(layer_LeaseArea_3);
+        map.addLayer(layer_LeaseArea_3);
+        function pop_ExtraExcavated_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>LAYER</strong><br />' + (feature.properties['LAYER'] !== null ? autolinker.link(feature.properties['LAYER'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>AREA1</strong><br />' + (feature.properties['AREA1'] !== null ? autolinker.link(feature.properties['AREA1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ExtraExcavated_4_0() {
+            return {
+                pane: 'pane_ExtraExcavated_4',
+                opacity: 1,
+                color: 'rgba(228,26,28,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ExtraExcavated_4');
+        map.getPane('pane_ExtraExcavated_4').style.zIndex = 404;
+        map.getPane('pane_ExtraExcavated_4').style['mix-blend-mode'] = 'normal';
+        var layer_ExtraExcavated_4 = new L.geoJson(json_ExtraExcavated_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ExtraExcavated_4',
+            layerName: 'layer_ExtraExcavated_4',
+            pane: 'pane_ExtraExcavated_4',
+            onEachFeature: pop_ExtraExcavated_4,
+            style: style_ExtraExcavated_4_0,
+        });
+        bounds_group.addLayer(layer_ExtraExcavated_4);
+        map.addLayer(layer_ExtraExcavated_4);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/ExtraExcavated_4.png" /> Extra Excavated': layer_ExtraExcavated_4,'<img src="legend/LeaseArea_3.png" /> Lease Area': layer_LeaseArea_3,"20_Tvl.Sri Selva Vinayagar Kaludaippor Mahalir Nalasangam__1": layer_20_TvlSriSelvaVinayagarKaludaipporMahalirNalasangam__1_2,"20_Village Map": layer_20_VillageMap_1,"google earth": layer_googleearth_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        L.ImageOverlay.include({
+            getBounds: function () {
+                return this._bounds;
+            }
+        });
+        </script>
+    </body>
+</html>
